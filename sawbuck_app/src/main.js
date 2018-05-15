@@ -71,7 +71,7 @@ const loggedOutNav = () => {
 /**
  * Returns a route resolver which handles authorization related business.
  */
-const resolve = (view, restricted = false) => {
+const resolve = (view, restricted=false) => {
   const resolver = {}
 
   if (restricted) {

@@ -49,27 +49,44 @@ const acceptButton = (offer, account = null) => {
   }
 
   return m(
-    `button.btn.btn-lg.btn-outline-${disabled ? 'secondary' : 'primary'}`,
+    `button.btn.btn-sm.btn-outline-${disabled ? 'success' : 'primary'}`,
     { onclick, disabled },
     'Accept')
 }
 
+const testOffers = offers =>{
+   
+      
+
+}
 const offerRow = account => offer => {
   return [
-    m('.row.my-2',
-      m('.col-md-9',
-        m('a.h5', {
-          href: `/offers/${offer.id}`,
-          oncreate: m.route.link
-        }, offer.label || offer.id)),
-      m('.col-md-3.text-right', acceptButton(offer, account))),
-    mkt.bifold({
-      header: offer.sourceAsset,
-      body: offer.sourceQuantity
-    }, {
-      header: offer.targetAsset,
-      body: offer.targetQuantity || 'free'
-    })
+	m('.row',
+      m('.col-md-4',
+	    m(".row",
+		  [
+		    m(".col-md-12",
+			  [
+               m("a.col-md-6.text-left", {
+                href: `/offers/${offer.id}`,
+                oncreate: m.route.link
+               }, offer.label || offer.id),
+			   m("span.col-md-6.text-right", 
+                offer.sourceQuantity
+               ),
+			   m("img.img-rounded[alt='Image is NOT FOUND'][height='80%'][src='Test/Test.jpg'][width='100%']")
+              ]
+			 ),
+			  m(".col-md-9.text-left",
+			    offer.targetAsset +"SAWBUCK:"+ offer.targetQuantity !=0  ? offer.targetQuantity : m("em","free"))
+				,
+              m('.col-md-3.text-right',acceptButton(offer, account),
+			  )
+		 ]
+		)
+		)
+		)
+	
   ]
 }
 
@@ -130,27 +147,20 @@ const OfferListPage = {
         return offer.targetAsset === vnode.state.target
       })
     }
-
-    return [
-      layout.title('Available Offers'),
-      m('.container',
-        m('.row.text-center.my-4',
-          m('.col-md-5',
-            filterDropdown(
-              vnode.state.source || 'Offered',
-              sourceAssets,
-              asset => () => { vnode.state.source = asset })),
-          m('.col-md-2'),
-          m('.col-md-5',
-            filterDropdown(
-              vnode.state.target || 'Requested',
-              targetAssets,
-              asset => () => { vnode.state.target = asset }))),
-        offers.length > 0
+   return [
+	  layout.title('Available Offers'),
+       m('div',vnode.state.offers),
+      m('div',offers.map(offer = > {
+		m('span', offer)
+	})),
+      m('.container-fluid',
+	 offers.length > 0
           ? offers.map(offerRow(vnode.state.account))
           : m('.text-center.font-italic',
-              'there are currently no available offers'))
+              'there are currently no available offers')) 
     ]
+
+
   }
 }
 
